@@ -6,7 +6,7 @@ def main():
     while True:
         print("\033[2J\033[H", end='')
         game.print_boarder()
-        from_pos = input('Введите координату фигуры для хода (A2 | B1 и тп) --> ')
+        from_pos = input('Введите координату фигуры для хода --> ')
         to_pos = input('Введите координату куда походить? --> ')
         try:
             game.make_move(from_pos, to_pos)

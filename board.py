@@ -1,4 +1,3 @@
-from copy import deepcopy
 from pieces import Rook, Knight, Bishop, Queen, King, Pawn
 from Position import Position
 
@@ -7,22 +6,15 @@ class Board:
     cords = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
     def __init__(self):
         self.board = {}
+        self.history = []
     def get_piece(self, pos):
         return self.board.get(pos, None)
-    def set_piece(self, pos, piece):
-        self.board[pos] = piece
-    def remove_piece(self, pos):
-        del self.board[pos]
     def find_king(self, color):
         for pos, piece in self.board.items():
             if piece.name == 'King' and piece.color == color:
                 return pos
     def apply_move(self, from_pos, to_pos):
         self.board[to_pos] = self.board.pop(from_pos)
-    def copy(self):
-        new_board = Board()
-        new_board.board = deepcopy(self.board)
-        return new_board
     def setup_initial_position(self):
         self.board.clear()
         for piece, cord in zip(self.pieces, self.cords):
@@ -36,9 +28,16 @@ class Board:
             for let in self.cords:
                 cell = Position(let, n)
                 color = cell.check_cell_color()
-                stack += f"{(self.board.get(cell, '▢' if color == 'WHITE' else '■'))} "
+                stack += f"{(self.board.get(cell, '▢' if color == 'BLACK' else '■'))} "
             print(f'{n} {stack}')
             stack = ''
         print('  A B C D E F G H')   
     def __iter__(self):
         yield from self.board.items()
+    def temporary_move(self, from_pos, to_pos):
+        from_pos = self.board.pop(from_pos)
+        self.board[to_pos] = from_pos
+        self.history.append(from_pos, to_pos)
+    def remove_temporary_move(self):
+        from_pos, to_pos = self.history.pop()
+        self.board[from_pos] = self.board.pop(to_pos)

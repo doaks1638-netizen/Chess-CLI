@@ -10,16 +10,8 @@ class Game:
     def make_move(self, from_pos, to_pos):
         from_pos = Position.from_notation(from_pos.upper())
         to_pos = Position.from_notation(to_pos.upper())
-        from_figure = self.board.get_piece(from_pos)
-
-        if from_figure.color != self.current_turn:
-            raise ValueError('Сейчас ход другой стороны!')
         
-        if not from_figure: 
-            raise KeyError('Начальной фигуры для хода нет!')
-        
-        if to_pos not in from_figure.get_candidate_moves(self.board, from_pos):
-            raise KeyError('На данную клетку невозможно сделать ход!')
+        self.check_valide(from_pos, to_pos)
         
         self.board.apply_move(from_pos, to_pos)
         self.change_turn()
@@ -30,5 +22,27 @@ class Game:
     def print_boarder(self):
         self.board.print_board()
         print('\n')
-        print(f'Сейчас ходят: {self.current_turn}')
+        print(f'Сейчас ходят: {'белые' if self.current_turn == 'WHITE' else 'черные'}')
+    
+    def check_valide(self, from_pos:Position, to_pos:Position):
+        '''
+        проверяет только допустимость выбранного хода
+        '''
+        king_pos = self.board.find_king()
+        from_figure = self.board.get_piece(from_pos)
+
+        if from_figure.color != self.current_turn:
+            raise ValueError('Сейчас ход другой стороны!')
+        
+        if not from_figure: 
+            raise ValueError('Начальной фигуры для хода нет!')
+        
+        if to_pos not in from_figure.get_candidate_moves(self.board, from_pos):
+            raise ValueError('На данную клетку невозможно сделать ход!')
+        
+
+    def check_checkmate_stalemate(self):
+        '''
+        проверяет шах / мат / пат после уже сделанного хода
+        '''
     

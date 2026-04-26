@@ -11,10 +11,13 @@ class Board:
         return self.board.get(pos, None)
     def find_king(self, color):
         for pos, piece in self.board.items():
-            if piece.name == 'King' and piece.color == color:
+            if  isinstance(piece, King) and piece.color == color:
                 return pos
+        raise ValueError('Король не найден! Если была загрузка через json, пожалуйста не ломайте фигуры!')
     def apply_move(self, from_pos, to_pos):
-        self.board[to_pos] = self.board.pop(from_pos)
+        piece = self.board.pop(from_pos)
+        self.board[to_pos] = piece
+        piece.after_move()
     def setup_initial_position(self):
         self.board.clear()
         for piece, cord in zip(self.pieces, self.cords):
@@ -35,9 +38,14 @@ class Board:
     def __iter__(self):
         yield from self.board.items()
     def temporary_move(self, from_pos, to_pos):
-        from_pos = self.board.pop(from_pos)
-        self.board[to_pos] = from_pos
-        self.history.append(from_pos, to_pos)
+        from_piece = self.board.pop(from_pos)
+        to_piece = self.board.pop(to_pos, None)
+        self.board[to_pos] = from_piece
+        self.history.append((from_pos, to_pos, from_piece, to_piece))
     def remove_temporary_move(self):
-        from_pos, to_pos = self.history.pop()
-        self.board[from_pos] = self.board.pop(to_pos)
+        from_pos, to_pos, from_piece, to_piece = self.history.pop()
+        self.board.pop(to_pos)
+        self.board[from_pos] = from_piece
+        if to_piece is not None:
+            self.board[to_pos] = to_piece
+    

@@ -12,6 +12,8 @@ class Piece(ABC):
         return self.white if self.color == 'WHITE' else self.black
     def after_move(self):
         self.has_move = True
+    def get_attacked_moves(self, board, position:Position):
+        return self.get_candidate_moves(board, position)
 class StepPiece(Piece):
     def get_candidate_moves(self, board, position) -> list[Position]:
         move_list = []
@@ -26,9 +28,8 @@ class StepPiece(Piece):
             if (figure := board.get_piece(pos)):
                 if figure.color != self.color:
                     move_list.append(pos)
-                else:
-                    continue
-            move_list.append(pos)
+            else:
+                move_list.append(pos)
         return move_list
 
 class RayPiece(Piece):
@@ -82,8 +83,6 @@ class Pawn(Piece):
     def __init__(self, color):
         super().__init__(color)
     def after_move(self):
-        if not self.has_move:
-            self.norma_ways.pop(4)
         self.has_move = True
     def get_candidate_moves(self, board, position) -> list[Position]:
         move_list = []
@@ -95,7 +94,7 @@ class Pawn(Piece):
                 if not self.has_move:
                     try:
                         pos_two = Position.from_numbers(x_pos + 0, y_pos + (direction + direction))
-                        if board.get_piece(pos) is None: 
+                        if board.get_piece(pos_two) is None: 
                             move_list.append(pos_two)
                     except ValueError:
                         pass
@@ -108,6 +107,17 @@ class Pawn(Piece):
                 if (figure := board.get_piece(pos)) is not None:
                     if figure.color != self.color:
                         move_list.append(pos)
+            except ValueError:
+                pass    
+        return move_list
+    def get_attacked_moves(self, board, position):
+        move_list = []
+        x_pos, y_pos = position.to_numbers()
+        direction = 1 if self.color == 'WHITE' else -1
+        for x, y in [(1, direction), (-1, direction)]:
+            try:
+                pos = Position.from_numbers(x_pos + x, y_pos + y)
+                move_list.append(pos)
             except ValueError:
                 pass    
         return move_list

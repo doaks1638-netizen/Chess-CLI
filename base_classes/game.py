@@ -34,12 +34,6 @@ class Game:
         '''
         from_figure = self.board.get_piece(from_pos)
         
-        if not from_figure: 
-            raise ValueError('Начальной фигуры для хода нет!')
-        
-        if from_figure.color != self.current_turn:
-            raise ValueError('Сейчас ход другой стороны!')
-        
         all_position = from_figure.get_candidate_moves(self.board, from_pos)
 
         if to_pos not in all_position:
@@ -86,5 +80,15 @@ class Game:
                     
     def get_turn(self):
         return 'белые'if self.current_turn == 'WHITE' else 'черные'
+    
+    def get_maybe_moves(self, from_pos: Position) -> list[Position]:
+        from_pos = Position.from_notation(from_pos.upper())
+        from_figure = self.board.get_piece(from_pos)
+        if not from_figure:
+            raise ValueError('Начальной фигуры для хода нет!')
+        if from_figure.color != self.current_turn:
+            raise ValueError('Сейчас ход другой стороны!')
+        else:
+            return from_figure.get_candidate_moves(self.board, from_pos)
     
     

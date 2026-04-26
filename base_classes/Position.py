@@ -40,6 +40,9 @@ class Position:
     def __repr__(self):
         return f'Position({self.x_pos}, {self.y_pos})'
     
+    def __str__(self):
+        return f'{self.x_pos}{self.y_pos}'
+    
     def __eq__(self, other):
         if not isinstance(other, Position):
             return NotImplemented

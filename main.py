@@ -1,4 +1,4 @@
-from game import Game
+from base_classes.game import Game
 from time import sleep
 
 def main():

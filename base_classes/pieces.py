@@ -5,16 +5,22 @@ class Piece(ABC):
     def __init__(self, color):
         self.color = color
         self.has_move = False
+
     @abstractmethod
     def get_candidate_moves(self, board, position) -> list[Position]:
         pass
+
     def __repr__(self):
         return self.white if self.color == 'WHITE' else self.black
+    
     def after_move(self):
         self.has_move = True
-    def get_attacked_moves(self, board, position:Position):
+
+    def get_attacked_moves(self, board, position:Position) -> list[Position]:
         return self.get_candidate_moves(board, position)
+    
 class StepPiece(Piece):
+
     def get_candidate_moves(self, board, position) -> list[Position]:
         move_list = []
         for x, y in self.normal_ways:
@@ -33,6 +39,7 @@ class StepPiece(Piece):
         return move_list
 
 class RayPiece(Piece):
+
     def get_candidate_moves(self, board, position:Position) -> list[Position]:
         move_list = []
         for x, y in self.normal_ways:
@@ -80,11 +87,14 @@ class King(StepPiece):
 class Pawn(Piece):
     white = '♟'
     black = '♙'
+
     def __init__(self, color):
         super().__init__(color)
+
     def after_move(self):
         self.has_move = True
-    def get_candidate_moves(self, board, position) -> list[Position]:
+
+    def get_candidate_moves(self, board, position:Position) -> list[Position]:
         move_list = []
         x_pos, y_pos = position.to_numbers()
         direction = 1 if self.color == 'WHITE' else -1
@@ -110,7 +120,8 @@ class Pawn(Piece):
             except ValueError:
                 pass    
         return move_list
-    def get_attacked_moves(self, board, position):
+    
+    def get_attacked_moves(self, board, position:Position) -> list[Position]:
         move_list = []
         x_pos, y_pos = position.to_numbers()
         direction = 1 if self.color == 'WHITE' else -1

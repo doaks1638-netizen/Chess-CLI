@@ -1,23 +1,29 @@
 from base_classes.pieces import Rook, Knight, Bishop, Queen, King, Pawn
 from base_classes.Position import Position
+from typing import Literal, Iterable
 
 class Board:
     pieces = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
     cords = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+
     def __init__(self):
         self.board = {}
         self.history = []
-    def get_piece(self, pos):
+
+    def get_piece(self, pos:Position):
         return self.board.get(pos, None)
-    def find_king(self, color):
+    
+    def find_king(self, color:Literal['WHITE', 'BLACK']):
         for pos, piece in self.board.items():
             if  isinstance(piece, King) and piece.color == color:
                 return pos
         raise ValueError('Король не найден! Если была загрузка через json, пожалуйста не ломайте фигуры!')
-    def apply_move(self, from_pos, to_pos):
+    
+    def apply_move(self, from_pos:Position, to_pos:Position):
         piece = self.board.pop(from_pos)
         self.board[to_pos] = piece
         piece.after_move()
+
     def setup_initial_position(self):
         self.board.clear()
         for piece, cord in zip(self.pieces, self.cords):
@@ -25,6 +31,7 @@ class Board:
             self.board[Position(cord, 2)] = Pawn('WHITE')
             self.board[Position(cord, 7)] = Pawn('BLACK')
             self.board[Position(cord, 8)] = piece('BLACK')
+
     def print_board(self):
         for n in range(8,0, -1):
             stack = ''
@@ -35,14 +42,17 @@ class Board:
             print(f'{n} {stack}')
             stack = ''
         print('  A B C D E F G H')   
-    def __iter__(self):
+
+    def __iter__(self) -> Iterable:
         yield from self.board.items()
-    def temporary_move(self, from_pos, to_pos):
+
+    def temporary_move(self, from_pos:Position, to_pos:Position): # делает ход и запоминает его в истории
         from_piece = self.board.pop(from_pos)
         to_piece = self.board.pop(to_pos, None)
         self.board[to_pos] = from_piece
         self.history.append((from_pos, to_pos, from_piece, to_piece))
-    def remove_temporary_move(self):
+        
+    def remove_temporary_move(self): # удаляяет прошлый ход из истории возварщая все фигруы
         from_pos, to_pos, from_piece, to_piece = self.history.pop()
         self.board.pop(to_pos)
         self.board[from_pos] = from_piece

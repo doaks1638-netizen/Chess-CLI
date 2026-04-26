@@ -1,13 +1,15 @@
 from base_classes.Position import Position
 from base_classes.board import Board
-from base_classes.pieces import Rook, Knight, Bishop, Queen, King, Pawn
+from typing import Literal
 
 class Game:
+
     def __init__(self):
         self.board = Board()
         self.board.setup_initial_position()
         self.current_turn = 'WHITE'
-    def make_move(self, from_pos, to_pos):
+
+    def make_move(self, from_pos:str, to_pos:str) -> Literal['PAT', 'SHAH', 'MAT'] | None:
         from_pos = Position.from_notation(from_pos.upper())
         to_pos = Position.from_notation(to_pos.upper())
         
@@ -49,7 +51,7 @@ class Game:
         finally:
             self.board.remove_temporary_move()
 
-    def check_checkmate_stalemate(self, color=None):
+    def check_checkmate_stalemate(self, color :Literal['WHITE', 'BLACK'] = None) -> Literal['PAT', 'SHAH', 'MAT'] | None:
         if color is None:
             color = self.current_turn
         shah_status = self.shah_checker(color)
@@ -62,13 +64,15 @@ class Game:
             return 'SHAH'
         else:
             return 'MAT'
-    def shah_checker(self, color):
+        
+    def shah_checker(self, color:Literal['WHITE', 'BLACK']):
         king_pos = self.board.find_king(color)
         for pos, figure in self.board:
             if figure.color != color and king_pos in figure.get_attacked_moves(self.board, pos):
                 return True
         return False
-    def can_move_checker(self, color):
+    
+    def can_move_checker(self, color:Literal['WHITE', 'BLACK']):
         for pos, figure in self.board:
             if figure.color == color and (moves := figure.get_candidate_moves(self.board, pos)):
                 for move in moves:

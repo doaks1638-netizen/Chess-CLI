@@ -57,6 +57,12 @@ class Position:
     def to_numbers(self):
         return (ord(self.x_pos) - 64, self.y_pos)
     
+    def to_json(self):
+        return f"{self.x_pos}{self.y_pos}"
+    
+    def from_json(self):
+        pass
+    
     @classmethod
     def from_numbers(cls, x:int, y:int):
         if not (isinstance(x, int) and isinstance(y, int)):
@@ -66,3 +72,4 @@ class Position:
             return Position(cls.bkv[x - 1], y)
         
         raise ValueError('Неправильный тип координат!')
+    

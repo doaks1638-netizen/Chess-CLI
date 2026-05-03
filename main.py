@@ -49,8 +49,20 @@ def main():
                 print(e)
                 sleep(2)
         except KeyboardInterrupt:
-            print('\n\n\nByyee!')
-            break
-
+            try:
+                save_choise = input('\n\nХотели ли бы вы сделать копию игры? Сохранится в вашей домашней дириктории. y/n --> ')
+                if save_choise == 'y':
+                    name = input('\n\nВведите имя для сохранения... Дефолт - текущая дата --> ')
+                    if name:
+                        game.save_json(name)
+                        print('\nСохранено! ✅')
+                    else:
+                        game.save_json()
+                        print('\nСохранено! ✅')
+                print('\n\nBye!👀')
+                break
+            except KeyboardInterrupt:
+                print('\n\nBye!👀')
+                break
 if __name__ == '__main__':
     main()

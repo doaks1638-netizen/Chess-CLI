@@ -19,6 +19,37 @@ class Piece(ABC):
     def get_attacked_moves(self, board, position:Position) -> list[Position]:
         return self.get_candidate_moves(board, position)
     
+    def to_json(self):
+        return {'class': type(self).__name__, 'color':self.color, 'has_move':self.has_move}
+    
+    @classmethod
+    def from_json(cls, data):
+        match data['class']:
+            case 'Rook':
+                obj = Rook(data['color'])
+                obj.has_move = data['has_move']
+                return obj
+            case 'Knight':
+                obj = Knight(data['color'])
+                obj.has_move = data['has_move']
+                return obj
+            case 'Bishop':
+                obj = Bishop(data['color'])
+                obj.has_move = data['has_move']
+                return obj
+            case 'Queen':
+                obj = Queen(data['color'])
+                obj.has_move = data['has_move']
+                return obj
+            case 'King':
+                obj = King(data['color'])
+                obj.has_move = data['has_move']
+                return obj
+            case 'Pawn':
+                obj = Pawn(data['color'])
+                obj.has_move = data['has_move']
+                return obj
+    
 class StepPiece(Piece):
 
     def get_candidate_moves(self, board, position) -> list[Position]:

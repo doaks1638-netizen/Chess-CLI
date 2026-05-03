@@ -1,6 +1,17 @@
 from base_classes.Position import Position
 from base_classes.board import Board
 from typing import Literal
+from pathlib import Path
+from json import dump, dumps
+from datetime import datetime
+
+class MISING:
+    
+    def __repr__(self):
+        return 'MISING'
+
+MISING = MISING()
+
 
 class Game:
 
@@ -90,5 +101,20 @@ class Game:
             raise ValueError('Сейчас ход другой стороны!')
         else:
             return from_figure.get_candidate_moves(self.board, from_pos)
+        
+    def save_json(self, name=MISING):
+        try:
+            if name is MISING:
+                name = datetime.now()
+            file_dir = Path.cwd() / 'old_games'
+            file_dir.mkdir(exist_ok=True)
+            new_file = file_dir / f"{name}.json"
+            new_file.touch()  
+
+            with open(new_file.absolute(), 'w') as file:
+                dump(self.board.to_dict(), file, ensure_ascii=False, indent=4)
     
+        except Exception as e:
+            raise ValueError(f'Возникал ошибка при сохранении игры. Ошибка типа {type(e)}, текст - {e}')
+
     

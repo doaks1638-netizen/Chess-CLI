@@ -8,14 +8,14 @@ class Board:
 
     def __init__(self):
         self.board = {}
-        self.history = []
+        self.history = [] # история для временных ходов (в будущем будет изменена логика на сохранение кодов)
 
     def get_piece(self, pos:Position):
         return self.board.get(pos, None)
     
     def find_king(self, color:Literal['WHITE', 'BLACK']):
         for pos, piece in self.board.items():
-            if  isinstance(piece, King) and piece.color == color:
+            if isinstance(piece, King) and piece.color == color:
                 return pos
         raise ValueError('Король не найден! Если была загрузка через json, пожалуйста не ломайте фигуры!')
     
@@ -59,3 +59,8 @@ class Board:
         if to_piece is not None:
             self.board[to_pos] = to_piece
     
+    def to_dict(self):
+        self.normal_dict = dict()
+        for key, value in self.board.items():
+            self.normal_dict[key.to_json()] = value.to_json()
+        return self.normal_dict

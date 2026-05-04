@@ -1,5 +1,6 @@
 from base_classes.game import Game
 from time import sleep
+import os
 
 def show_menu():
     print("""
@@ -17,24 +18,24 @@ def show_menu():
 
   [1]  ♔  Новая игра
   [2]  ♖  Импортировать из файла
-  [3]  ♔  Прочитать правила игры
-  [4]  ♖  Возможности программы?       
+  [3]  ♔  Прочитать правила игры 
+  [4]  ♖  Справка 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━""")
     
 
 def chess_game(game):
-    print("\033[2J\033[H", end='')
+    clear_t()
     while True:
         try:
-            print("\033[2J\033[H", end='')
+            clear_t()
             game.print_boarder()
             from_pos = input('Введите координату фигуры для хода --> ')
             try:
                 moves = game.get_maybe_moves(from_pos)
                 print(f'Доступные ходы: {' ,'.join(map(str, moves))}')
             except Exception as e:
-                print("\033[2J\033[H", end='')
+                clear_t()
                 print(e)
                 sleep(2)
                 continue
@@ -46,26 +47,26 @@ def chess_game(game):
 
                     case 'PAT':
                         for _ in range(3):
-                            print("\033[2J\033[H", end='')
+                            clear_t()
                             print(f'ИГРА ОКОНЧЕНА! ПАТ на стороне {game.get_turn()}')
                             sleep(1)
                         break
 
                     case 'SHAH':
                         for _ in range(3):
-                            print("\033[2J\033[H", end='')
+                            clear_t()
                             print(f'ВНИМАНИЕ! ШАХ на стороне {game.get_turn()}')
                             sleep(1)
                     case 'MAT':
 
                         for _ in range(3):
-                            print("\033[2J\033[H", end='')
+                            clear_t()
                             print(f'ИГРА ОКОНЧЕНА! МАТ на стороне {game.get_turn()}')
                             sleep(1)
                         break
                             
             except Exception as e:
-                print("\033[2J\033[H", end='')
+                clear_t()
                 print(e)
                 sleep(2)
         except KeyboardInterrupt:
@@ -88,11 +89,13 @@ def chess_game(game):
 def menu():
     game = Game()
 
-    show_menu()
     while True:
-        choice = input('Выберите пункт меню: -> ')
-
         try:
+            
+            clear_t()
+            show_menu()
+            choice = input('Выберите пункт меню: -> ')
+
             if choice == '1':
                 chess_game(game)
                 return
@@ -124,13 +127,16 @@ def menu():
                     print('Возникла неизвестная ошибка! :(')
                     return
             elif choice == '3':
-                game.show_rules()
+                game.show_resources_file('rules.md')
+            elif choice == '4':
+                game.show_resources_file('possibilities.md')
         except KeyboardInterrupt:
             print('\n\nBye!👀')
             return
-        print("\033[2J\033[H", end='')
+        clear_t()
 
-
+def clear_t():
+    os.system('cls' if os.name == 'nt' else 'clear')
     
 if __name__ == '__main__':
     menu()

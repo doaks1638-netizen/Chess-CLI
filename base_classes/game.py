@@ -138,10 +138,10 @@ class Game:
             file_list.append(file.name)
         return file_list
 
-    def show_rules(self):
-        file_dir = Path.cwd() / 'resources' / 'rules.md'
+    def show_resources_file(self, filename):
+        file_dir = Path.cwd() / 'resources' / filename
         if not file_dir.exists():
-            raise ValueError('Нет возможности выдать правила, папка программы поврежденна')
+            raise ValueError('Нет возможности выдать файл, папка программы поврежденна')
         file_dir = file_dir.absolute()
         if sys.platform.startswith('win'):
             subprocess.run(['notepad', file_dir])

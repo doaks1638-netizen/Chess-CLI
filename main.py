@@ -1,10 +1,30 @@
 from base_classes.game import Game
 from time import sleep
 
-def main():
+def show_menu():
+    print("""
+ ██████╗██╗  ██╗███████╗███████╗███████╗
+██╔════╝██║  ██║██╔════╝██╔════╝██╔════╝
+██║     ███████║█████╗  ███████╗███████╗
+██║     ██╔══██║██╔══╝  ╚════██║╚════██║
+╚██████╗██║  ██║███████╗███████║███████║
+ ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
 
-    game = Game()
+    ♙  A terminal chess experience  ♟
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+           ─── MAIN MENU ───
+
+  [1]  ♔  Новая игра
+  [2]  ♖  Импортировать из файла
+  [3]  ♔  Прочитать правила игры
+  [4]  ♖  Возможности программы?       
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━""")
+    
+
+def chess_game(game):
+    print("\033[2J\033[H", end='')
     while True:
         try:
             print("\033[2J\033[H", end='')
@@ -54,15 +74,63 @@ def main():
                 if save_choise == 'y':
                     name = input('\n\nВведите имя для сохранения... Дефолт - текущая дата --> ')
                     if name:
-                        game.save_json(name)
-                        print('\nСохранено! ✅')
+                        file_save_name = game.save_json(name)
+                        print(f'\nСохранено в {file_save_name}! ✅')
                     else:
-                        game.save_json()
-                        print('\nСохранено! ✅')
+                        file_save_name = game.save_json()
+                        print(f'\nСохранено в {file_save_name}! ✅')
                 print('\n\nBye!👀')
                 break
             except KeyboardInterrupt:
                 print('\n\nBye!👀')
                 break
+
+def menu():
+    game = Game()
+
+    show_menu()
+    while True:
+        choice = input('Выберите пункт меню: -> ')
+
+        try:
+            if choice == '1':
+                chess_game(game)
+                return
+            if choice == '2':
+                print('\nСписок доступных партий:\n')
+                list_of_files = game.json_base_iterdir()
+                for num, filename in enumerate(list_of_files, 1):
+                    print(f'{num}. - {filename}')
+                print()
+                try:
+                    name_choice = input('Введите номер файла для старта -> ')
+                    if not (name_choice.isdigit() and (int(name_choice) - 1) < len(list_of_files)):
+                        raise ValueError('Неверное выбран файл!')
+                    name_choice = int(name_choice) - 1
+                    file_save_name = game.load_json(list_of_files[name_choice])
+                    print(f'\n\nУспешно импортировано из {file_save_name}!')
+                    chess_game(game)
+                    return
+                except ValueError as e:
+                    print(f'\n\nВозникла ошибка -> {e}')
+                    choice_result = input('\nCоздать новую игру? y|n -> ')
+                    if choice_result != 'y':
+                        print('\n\nBye!👀')
+                        return
+                    else:
+                        chess_game(game)
+                        return
+                except Exception as e:
+                    print('Возникла неизвестная ошибка! :(')
+                    return
+            elif choice == '3':
+                game.show_rules()
+        except KeyboardInterrupt:
+            print('\n\nBye!👀')
+            return
+        print("\033[2J\033[H", end='')
+
+
+    
 if __name__ == '__main__':
-    main()
+    menu()

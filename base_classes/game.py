@@ -2,8 +2,11 @@ from base_classes.Position import Position
 from base_classes.board import Board
 from typing import Literal
 from pathlib import Path
-from json import dump, dumps
+from json import dump, dumps, load
 from datetime import datetime
+import subprocess
+import shutil
+import sys
 
 class MISING:
     
@@ -103,18 +106,51 @@ class Game:
             return from_figure.get_candidate_moves(self.board, from_pos)
         
     def save_json(self, name=MISING):
-        try:
-            if name is MISING:
-                name = datetime.now()
-            file_dir = Path.cwd() / 'old_games'
-            file_dir.mkdir(exist_ok=True)
-            new_file = file_dir / f"{name}.json"
-            new_file.touch()  
+        if name is MISING:
+            name = datetime.now().strftime('%d-%m %H:%M%S')
+        file_dir = Path.cwd() / 'old_games'
+        file_dir.mkdir(exist_ok=True)
+        new_file = file_dir / f"{name}.json"
+        new_file.touch()  
 
-            with open(new_file.absolute(), 'w') as file:
-                dump(self.board.to_dict(), file, ensure_ascii=False, indent=4)
-    
-        except Exception as e:
-            raise ValueError(f'Возникал ошибка при сохранении игры. Ошибка типа {type(e)}, текст - {e}')
+        with open(new_file.absolute(), 'w') as file:
+            dump(self.board.to_dict(), file, ensure_ascii=False, indent=4)
 
+            return new_file.name
+        
+    def load_json(self, name):
+        file_dir = Path.cwd() / 'old_games'
+        if not file_dir.exists():
+            raise ValueError('Папка для скачивания не найдена!')
+        new_file = file_dir / name
+        if not new_file.exists():
+            raise ValueError('Файл для скачивания не найдена!')
+        with open(new_file.absolute()) as file:
+            self.board = Board.from_dict(load(file))
+        return new_file.name
     
+    def json_base_iterdir(self):
+        file_dir = Path.cwd() / 'old_games'
+        if not file_dir.exists():
+            raise ValueError('Папка для скачивания не найдена!')
+        file_list = []
+        for file in file_dir.iterdir():
+            file_list.append(file.name)
+        return file_list
+
+    def show_rules(self):
+        file_dir = Path.cwd() / 'resources' / 'rules.md'
+        if not file_dir.exists():
+            raise ValueError('Нет возможности выдать правила, папка программы поврежденна')
+        file_dir = file_dir.absolute()
+        if sys.platform.startswith('win'):
+            subprocess.run(['notepad', file_dir])
+        elif sys.platform.startswith('darwin'):
+            subprocess.run(['open', file_dir])
+        else:
+            if shutil.which('vim'):
+                subprocess.run(['vim', file_dir])
+            elif shutil.which('less'):
+                subprocess.run(['less', file_dir])
+            else:
+                subprocess.run(['xdg-open', file_dir])

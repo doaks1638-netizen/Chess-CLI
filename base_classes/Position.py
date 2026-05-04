@@ -60,8 +60,10 @@ class Position:
     def to_json(self):
         return f"{self.x_pos}{self.y_pos}"
     
-    def from_json(self):
-        pass
+    @classmethod
+    def from_json(cls, pos_string):
+        x_pos, y_pos = pos_string
+        return Position(x_pos, int(y_pos))
     
     @classmethod
     def from_numbers(cls, x:int, y:int):

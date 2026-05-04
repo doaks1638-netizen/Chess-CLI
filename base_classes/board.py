@@ -1,4 +1,4 @@
-from base_classes.pieces import Rook, Knight, Bishop, Queen, King, Pawn
+from base_classes.pieces import Rook, Knight, Bishop, Queen, King, Pawn, Piece
 from base_classes.Position import Position
 from typing import Literal, Iterable
 
@@ -64,3 +64,11 @@ class Board:
         for key, value in self.board.items():
             self.normal_dict[key.to_json()] = value.to_json()
         return self.normal_dict
+
+    @classmethod
+    def from_dict(cls, board_dict):
+        new_board = Board()
+        for key, value in board_dict.items():
+            new_board.board[Position.from_json(key)] = Piece.from_json(value)
+        return new_board
+    

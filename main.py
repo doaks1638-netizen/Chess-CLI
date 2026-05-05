@@ -24,12 +24,25 @@ def show_menu():
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━""")
     
 
-def chess_game(game):
+def chess_game(game: Game):
     clear_t()
     while True:
         try:
             clear_t()
             game.print_boarder()
+            if game.step_50_rules():
+                draw_stat = input('Правило 50 ходов. Чтобы не затягивать партию до бесконечности,' \
+                ' предлогаем вам объевить ничью. y/n --> ')
+                match draw_stat:
+                    case 'y':
+                        for _ in range(3):
+                            clear_t()
+                            print('ИГРА ОКОНЧЕНА! Ничья между игроками')
+                            sleep(1)
+                        break
+                    case _:
+                        clear_t()
+                        game.print_boarder()
             from_pos = input('Введите координату фигуры для хода --> ')
             try:
                 moves = game.get_maybe_moves(from_pos)

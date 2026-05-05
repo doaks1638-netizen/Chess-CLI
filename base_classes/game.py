@@ -1,5 +1,6 @@
 from base_classes.Position import Position
 from base_classes.board import Board
+from base_classes.pieces import Pawn
 from typing import Literal
 from pathlib import Path
 from json import dump, dumps, load
@@ -22,6 +23,8 @@ class Game:
         self.board = Board()
         self.board.setup_initial_position()
         self.current_turn = 'WHITE'
+        self.all_moves = 0
+        self.step_50_choice = True
 
     def make_move(self, from_pos:str, to_pos:str) -> Literal['PAT', 'SHAH', 'MAT'] | None:
         from_pos = Position.from_notation(from_pos.upper())
@@ -154,3 +157,15 @@ class Game:
                 subprocess.run(['less', file_dir])
             else:
                 subprocess.run(['xdg-open', file_dir])
+
+    def step_50_rules(self):
+        if not self.step_50_choice:
+            return False
+        cords = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+        if not self.all_moves >= 100:
+            return False
+        for cord in cords:
+            if not (isinstance(self.board.get_piece(Position(cord, 2)), Pawn) 
+                    and isinstance(self.board.get_piece(Position(cord, 7)), Pawn)):
+                return False
+        return True

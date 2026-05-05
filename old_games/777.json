@@ -1,0 +1,162 @@
+{
+    "A1": {
+        "class": "Rook",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "A2": {
+        "class": "Pawn",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "A8": {
+        "class": "Rook",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "B1": {
+        "class": "Knight",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "B2": {
+        "class": "Pawn",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "B7": {
+        "class": "Pawn",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "B8": {
+        "class": "Knight",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "C1": {
+        "class": "Bishop",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "C2": {
+        "class": "Pawn",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "C7": {
+        "class": "Pawn",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "C8": {
+        "class": "Bishop",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "D1": {
+        "class": "Queen",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "D2": {
+        "class": "Pawn",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "D7": {
+        "class": "Pawn",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "D8": {
+        "class": "Queen",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "E1": {
+        "class": "King",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "E2": {
+        "class": "Pawn",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "E7": {
+        "class": "Pawn",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "E8": {
+        "class": "King",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "F1": {
+        "class": "Bishop",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "F2": {
+        "class": "Pawn",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "F7": {
+        "class": "Pawn",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "F8": {
+        "class": "Bishop",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "G2": {
+        "class": "Pawn",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "G7": {
+        "class": "Pawn",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "G8": {
+        "class": "Knight",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "H1": {
+        "class": "Rook",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "H2": {
+        "class": "Pawn",
+        "color": "WHITE",
+        "has_move": false
+    },
+    "H7": {
+        "class": "Pawn",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "H8": {
+        "class": "Rook",
+        "color": "BLACK",
+        "has_move": false
+    },
+    "H3": {
+        "class": "Knight",
+        "color": "WHITE",
+        "has_move": true
+    },
+    "A7": {
+        "class": "Pawn",
+        "color": "BLACK",
+        "has_move": false
+    }
+}
